@@ -1,0 +1,31 @@
+MOFF IDP Guide
+By Andrew Latham and Bin Zhang
+Please cite Latham, A; Zhang, B JCTC, 2019. s(https://pubs.acs.org/doi/10.1021/acs.jctc.9b00932)
+
+1.	Setup template and pdb
+	a.	Run write_MOFF.py. Should be up to 2 arguments. The first is the pdb file for the protein that you want to simulate. The second is the template file. Unless doing further development, this should be template_MOFF.top.
+	b.	The output should be a CA only pdb file and a template file. These will be input for gromacs
+2.	Generate a table potential
+	a.	Use write_table.py to make a tabulated potential for MOFF. There are up to 6 input possibilities:
+	(python write_table.py ionic_strength outputfile cut cut2 table_length dr)
+		i.	ionic_strength is for the debye-huckel electrostatic interactions, in mM (default=150 mM)
+		ii.	outputfile is the name of the table (default=table.xvg)
+		iii.	cut is the distance at which electrostatic interactions are cut to 0 with a fifth degree polynomial switching function (default=1.5 nm)
+		iv.	cut2 is the distance at which electrostatic interactions are dampened with a fifth degree polynomial switching function (default=1.2 nm)
+		v.	table_length is the length of the generated table (default=15 nm)
+		vi.	dr is the minimal distance at which the table is calculated (default=0.002 nm)
+
+3.	Run simulation
+	a.	Minimize energy
+	b.	Place in an empty simulation box
+	c.	Run your simulation
+
+Check out the Example folder for an example on how to do a simple simulation.
+
+Starting in the example folder:
+	1.	python ../Scripts/write_MOFF.py An16 ../Scripts/template_MOFF.top
+	2.	python ../Scripts/write_table.py
+	3.	Run the corresponding commands in Gromacs from job.pbs
+
+Compatible with any version of GROMACS that uses tabulated potentials (used GROMACS 4.5 in published work)
+Email aplatham@mit.edu with any questions

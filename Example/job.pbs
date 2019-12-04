@@ -1,0 +1,19 @@
+#!/bin/bash
+
+#SBATCH --job-name=An16
+#SBATCH -N 1
+#SBATCH -n 1
+#SBATCH --partition=sched_mit_binz_long
+#SBATCH --time=48:00:00
+#SBATCH --mem-per-cpu=4G
+#SBATCH --constraint=centos7
+
+module load engaging/openmpi/2.0.3
+
+/home/aplatham2/Programs/gromacs-2018.4/bin/gmx_mpi grompp -f min.mdp -c An16_CA.pdb -p An16.top -o min.tpr
+/home/aplatham2/Programs/gromacs-2018.4/bin/gmx_mpi mdrun -deffnm min -table table_MOFF.xvg
+
+/home/aplatham2/Programs/gromacs-2018.4/bin/gmx_mpi editconf -f min.gro -box 20 20 20 -c -o min.gro
+/home/aplatham2/Programs/gromacs-2018.4/bin/gmx_mpi grompp -f prod_0.mdp -c min.gro -p An16.top -o prod_0.tpr
+/home/aplatham2/Programs/gromacs-2018.4/bin/gmx_mpi mdrun -deffnm prod_0 -table table_MOFF.xvg
+
